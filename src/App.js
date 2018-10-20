@@ -1,5 +1,6 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, DirectionalLight, Vector3, ArrowHelper } from 'three';
 import OrbitControls from 'three-orbitcontrols';
+import Particle from "./model/Particle";
 
 export default class App {
     constructor(rendererWrap) {
@@ -24,6 +25,12 @@ export default class App {
 
         this.appendAixs(this.scene);
 
+        // Particle set initial random position & velocity on scene
+        const initParticlePosition = this.setRandomVector3(-0.2, 0.2, -0.2, 0.2, 2.0, 3.0);
+        const initParticleVelocity = this.setRandomVector3(-0.1, 0.1, -0.1, 0.1, -0.1, 0.1);
+        const p = new Particle(0.1, initParticlePosition, initParticleVelocity);
+        p.appendedTo(this.scene);
+
         // Render on scene
         this.renderer.render(this.scene, this.camera);
     }
@@ -43,5 +50,15 @@ export default class App {
         const zAixs = new Vector3(0, 0, 1);
         const arrowZ = new ArrowHelper(zAixs, origin, 1, 0xffffff);//white
         scene.add(arrowZ);
+    }
+    setRandomVector3(minX,maxX,minY,maxY,minZ,maxZ){
+        const x = this.getRandomFloat(minX,maxX),
+            y = this.getRandomFloat(minY,maxY),
+            z = this.getRandomFloat(minZ,maxZ);
+        return new Vector3(x,y,z);
+    }
+    getRandomFloat(min, max){
+        const random = Math.random() * (max - min) + min;
+        return parseFloat(random.toFixed(1));
     }
 }

@@ -1,6 +1,7 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, DirectionalLight, Vector3, ArrowHelper } from 'three';
 import OrbitControls from 'three-orbitcontrols';
 import Particle from "./model/Particle";
+import Plane from "./model/Plane";
 
 export default class App {
     constructor(rendererWrap) {
@@ -23,13 +24,20 @@ export default class App {
         // controls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-        this.appendAixs(this.scene);
+        this.aixsAppendedTo(this.scene);
 
         // Particle set initial random position & velocity on scene
         const initParticlePosition = this.setRandomVector3(-0.2, 0.2, -0.2, 0.2, 2.0, 3.0);
         const initParticleVelocity = this.setRandomVector3(-0.1, 0.1, -0.1, 0.1, -0.1, 0.1);
-        const p = new Particle(0.1, initParticlePosition, initParticleVelocity);
-        p.appendedTo(this.scene);
+        const particle = new Particle(0.1, initParticlePosition, initParticleVelocity);
+        particle.appendedTo(this.scene);
+
+        // plane
+        const p = this.setRandomVector3(-1.5, -1.0, -1.5, -1.0, -0.2, 0.2);
+        const q = this.setRandomVector3(1.0, 1.5, -1.5, -1.0, -0.2, 0.2);
+        const r = this.setRandomVector3(1.0, 1.5, 1.0, 1.5, -0.2, 0.2);
+        const plane = new Plane(p, q, r);
+        plane.appendedTo(this.scene);
 
         // Render on scene
         this.renderer.render(this.scene, this.camera);
@@ -39,7 +47,7 @@ export default class App {
         camera.position.set(position.x, position.y, position.z);
         return camera;
     }
-    appendAixs(scene){
+    aixsAppendedTo(scene){
         const origin = new Vector3(0, 0, 0);
         const xAixs = new Vector3(1, 0, 0);
         const arrowX = new ArrowHelper(xAixs, origin, 1, 0xff0000);//Red

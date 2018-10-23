@@ -4,9 +4,11 @@ let _mesh = null;
 
 export default class Plane {
     constructor(p1={x, y, z}, p2={x, y, z}, p3={x, y, z}) { // make plane using 3 points
+        this.p = p1; // A point on Plane
         this.u = new Vector3().subVectors(p2, p1);
         this.v = new Vector3().subVectors(p3, p1);
-        this.normal = new Vector3().crossVectors(this.u, this.v).normalize();
+        this.uCrossV = new Vector3().crossVectors(this.u, this.v);
+        this.normal = this.uCrossV.clone().normalize();
 
         const planeGeometry = new PlaneGeometry();
         planeGeometry.vertices[0]=this.equation(0,0, p1, this.u, this.v);
